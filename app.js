@@ -1,17 +1,22 @@
 //step 2: set up the app
 
-const express = require("express");
-const routes = require("./routes");
+const express = require('express');
+const morgan = require('morgan');
+
+const routes = require('./routes');
 
 const app = express();
 
-app.set('view engine', 'pug');
+app.set("view engine", "pug");
+
+app.use(morgan("dev"));
 
 app.use(routes);
 
-//Step 3: define a port and start listening for it 
-const port = 8080;
-app.listen(port, () => console.log(`listening on port ${port}...`));
+app.use((req,res,next) => {
+    const error = new Error('The requested page couldn\'t be found.');
+    error.status = 404;
+    next(err);
+});
 
-
-//Step 4: create the initial views (with pug templates)
+module.exports = app;
