@@ -42,4 +42,15 @@ app.use((error, req, res, next) => {
   }
 });
 
+//generic error handler
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  const isProduction = process.env.NODE_ENV === "production";
+  res.render("error", {
+    title: "Server Error",
+    message: isProduction ? null : error.message,
+    stack: isProduction ? null : error.stack,
+  });
+});
+
 module.exports = app;
